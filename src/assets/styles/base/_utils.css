@@ -1,0 +1,9 @@
+.hide {
+  display: none !important;
+  opacity: 0;
+  visibility: 0;
+  pointer-events: none;
+}
+.no-scroll {
+  overflow-y: hidden;
+}

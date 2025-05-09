@@ -1,0 +1,25 @@
+:root {
+  --color-primary: #ff4900;
+  --color-primary--dark: #cf3b00;
+  --color-secondary: #d1ff00;
+  --color-third: #ea79d1;
+  --color-test: #2a9976;
+
+  --color-neutral-main: white;
+  --color-neutral-main--light: #f0f0f0;
+  --color-neutral-main--lighten: #f0f0f0;
+  --color-neutral-main--dark: #d9d9d9;
+  --color-neutral-main--darken: #c2beba;
+
+  --color-neutral-secondary: rgb(235, 238, 255);
+
+  --color-neutral-contrast: #000000;
+
+  --color-neutral-additional: #494949;
+
+  --font-primary: Inter, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+
+  /* --font-primary: "Cinematografica";
+  --font-secondary: "BebasNeuePro";
+  --font-nums: "Maelstrom Sans"; */
+}
