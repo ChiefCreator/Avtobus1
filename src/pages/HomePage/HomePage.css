@@ -1,0 +1,25 @@
+.page {
+  padding: 24px 0;
+  height: 100%;
+}
+.page__container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.page__contacts-panel-wrapper {
+  flex: 1 1 auto;
+}
+
+.page__button-add-wrapper {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .page__button-add-wrapper {
+    display: flex;
+  }
+  .page__button-add-wrapper .button {
+    width: 100%;
+  }
+}

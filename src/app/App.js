@@ -7,6 +7,8 @@ import HomePage from "./../pages/HomePage/HomePage";
 import Header from "../components/Header/Header";
 import Button from "../components/Button/Button.js";
 
+import globalState from "./globalState.js";
+
 const buttonAddIcon = `
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
     <g clip-path="url(#clip0_9143_16)">
@@ -31,6 +33,8 @@ export default class App {
     this.view = new AppView({ root });
     this.model = new AppModel(this.view);
     this.controller = new AppController(this.model);
+
+    // globalState.subscribe(this.init.bind(this))
   }
 
   init() {
