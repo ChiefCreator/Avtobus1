@@ -1,0 +1,29 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+
+  padding: 10px 12px;
+  border-radius: 6px;
+
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 130%;
+}
+
+.button_primary {
+  color: white;
+  background-color: var(--color-primary);
+}
+.button_primary:hover {
+  background-color: var(--color-primary--dark);
+}
+
+.button_add {
+  color: white;
+  background-color: var(--color-secondary);
+}
+.button_add:hover {
+  background-color: var(--color-secondary--dark);
+}

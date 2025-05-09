@@ -1,15 +1,20 @@
+import { createDOM } from "../lib/domUtils";
 
 export default class AppView {
-  constructor() {
-    this.routes = null;
+  constructor({ root }) {
+    this.root = root;
+    this.el = null;
     this.content = null;
+
+    this.routes = null;
+    this.components = null;
   }
 
   setRoutes(routes) {
     this.routes = routes;
   }
-  setContent(content) {
-    this.content = content;
+  setComponents(components) {
+    this.components = components;
   }
 
   renderContent(currentPageId) {
@@ -21,5 +26,22 @@ export default class AppView {
 
     document.title = pageObject.title;
     window.scrollTo({ top: 0, behavior: "instant" });
+  }
+
+  init() {
+    this.el = this._create();
+    this.content = this.el.querySelector(".content");
+
+    root.append(this.el);
+  }
+  _create() {
+    const layout = createDOM("div", { className: "layout" });
+    const content = createDOM("div", { className: "content" });
+    const modalsContainer = createDOM("div", { className: "modals-container" });
+    const header = this.components.header.render();
+
+    layout.append(header, content, modalsContainer);
+
+    return layout;
   }
 }

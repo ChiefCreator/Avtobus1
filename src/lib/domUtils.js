@@ -5,7 +5,11 @@ export function createDOM(tag, { className, id, innerHTML, textContent, attribut
   if (id) el.id = id;
   if (textContent) el.textContent = textContent;
   if (innerHTML) el.innerHTML = innerHTML;
-  if (attributes) attributes.forEach((attributeObj) => el.setAttribute(attributeObj.title, attributeObj.value));
+  if (attributes) {
+    Object.entries(attributes)?.forEach(([key, value]) => {
+      el.setAttribute(key, value);
+    });
+  }
 
   return el;
 }
