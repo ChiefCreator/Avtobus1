@@ -6,8 +6,10 @@ import HomePage from "./../pages/HomePage/HomePage";
 
 import Header from "../components/Header/Header";
 import Button from "../components/Button/Button.js";
-
-import globalState from "./globalState.js";
+import Modal from "../components/Modal/Modal.js";
+import ContactsPanel from "../pages/HomePage/ContactsPanel/ContactsPanel.js";
+import ContactGroups from "../components/ContactGroups/ContactGroups.js";
+import ConfirmModal from "../components/ConfirmModal/ConfirmModal.js";
 
 const buttonAddIcon = `
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -30,15 +32,69 @@ export default class App {
     this.routes = null;
     this.components = null;
 
+    this.contactGroups = [{ id: "friends", title: "Друзья" }, { id: "collegues", title: "Коллеги" }];
+    this.deletedContactGroupId = "friends";
+
     this.view = new AppView({ root });
     this.model = new AppModel(this.view);
     this.controller = new AppController(this.model);
-
-    // globalState.subscribe(this.init.bind(this))
   }
 
   init() {
-    const homePage = new HomePage();
+    const contactsPanel = new ContactsPanel({ contactGroups: this.contactGroups });
+    const homePage = new HomePage({ contactsPanelObj: contactsPanel });
+
+    const contactGroups = new ContactGroups({
+      groups: this.contactGroups,
+      onClickButtonDelete: (id) => {
+        this.confirmModal.open();
+        this.confirmModal.setDeletedGroupId(id);
+        this.contactGroupsModal.close();
+      }
+    });
+    const buttonAddGroup = new Button({
+      className: "button_without-bg",
+      title: "Добавить",
+      onClick: () => {
+        if (!contactGroups.hasRecentlyAdded()) {
+          contactGroups.setNewGroup();
+        }
+      }
+    });
+    const buttonSaveGroups = new Button({
+      className: "button_primary",
+      title: "Сохранить",
+      onClick: () => {
+        contactsPanel.renderContent();
+        this.contactGroupsModal.close();
+      }
+    });
+
+    this.contactGroupsModal = new Modal({ 
+      title: "Группы контактов",
+      content: contactGroups,
+      buttons: [buttonAddGroup, buttonSaveGroups],
+      onClose: () => {
+        contactGroups.onModalClose();
+      }
+    });
+
+    const buttonGrops = new Button({ 
+      className: "button_primary",
+      title: "Группы",
+      onClick: () => {
+        this.contactGroupsModal.toggle();
+      }
+    });
+
+    this.confirmModal = new ConfirmModal({
+      title: "Удалить группу?",
+      description: "Удаление группы повлечет за собой удаление контактов связанных с этой группой",
+      buttonTrueOnClick: () => {
+        contactGroups.removeGroup(this.confirmModal.deletedGroupId);
+        contactsPanel.renderContent();
+      }
+    });
 
     this.routes = {
       main: homePage,
@@ -53,12 +109,11 @@ export default class App {
             title: "Добавить контакт",
             icon: buttonAddIcon
           }),
-          new Button({ 
-            className: "button_primary",
-            title: "Группы"
-          })
+          buttonGrops
         ]
       }),
+      contactGroupsModal: this.contactGroupsModal,
+      confirmModal: this.confirmModal,
     };
 
     this.view.setRoutes(this.routes);

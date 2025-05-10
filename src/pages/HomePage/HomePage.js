@@ -2,9 +2,6 @@ import { createDOM } from "./../../lib/domUtils";
 
 import Button from "./../../components/Button/Button";
 import Container from "./../../components/Container/Container";
-import ContactsPanel from "./ContactsPanel.js/ContactsPanel";
-
-import globalState from "./../../app/globalState";
 
 import "./HomePage.css";
 
@@ -22,13 +19,12 @@ const buttonAddIcon = `
 `
 
 export default class HomePage {
-  constructor() {
+  constructor({ contactsPanelObj }) {
     this.id = "main";
     this.title = "Главная";
     this.page = null;
 
-    this.contacts = globalState.getContacts();
-
+    this.contactsPanelObj = contactsPanelObj;
     this.buttonObj = null;
 
     this._init();
@@ -40,18 +36,13 @@ export default class HomePage {
       title: "Добавить контакт",
       icon: buttonAddIcon,
       onClick: () => {
-        globalState.updateState({ ...globalState.getState(), contacts: [{ name: "Иван", phone: "1234567890" }] });
+       
       }
     });
-    this.contactsPanelObj = new ContactsPanel();
 
     this.page = this._create();
-
-    this.contactsPanelObj.globalStateSubscribe();
   }
   _create() {
-    this.contacts = globalState.getContacts();
-
     const page = createDOM("main", { className: "page" });
     const pageContainer = createDOM("div", {
       className: "page__container",
@@ -71,7 +62,7 @@ export default class HomePage {
     buttonAddWrapper.append(buttonAdd);
     page.append(container);
 
-    this.contactsPanelObj.render(contactsPanelWrapper);
+    contactsPanelWrapper.append(this.contactsPanelObj.render());
 
     return page;
   }

@@ -38,7 +38,10 @@ export default class AppView {
     const layout = createDOM("div", { className: "layout" });
     const content = createDOM("div", { className: "content" });
     const modalsContainer = createDOM("div", { className: "modals-container" });
+
     const header = this.components.header.render();
+    modalsContainer.append(this.components.contactGroupsModal.render());
+    modalsContainer.append(this.components.confirmModal.render());
 
     layout.append(header, content, modalsContainer);
 

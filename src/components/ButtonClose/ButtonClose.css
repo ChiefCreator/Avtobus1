@@ -1,0 +1,11 @@
+.button-close {
+  display: inline-flex;
+  padding: 5px;
+  border-radius: 6px;
+
+  cursor: pointer;
+}
+
+.button-close:hover {
+  background-color: var(--color-neutral-main--dark);
+}
