@@ -31,6 +31,14 @@ export default class ContactGroups extends DefaultComponent {
 
     this.list.append(new ContactGroup({ ...newGroup, onButtonRemoveClick: this.handleRemoveButtonClick.bind(this), update: (group) => this.updateGroup(group) }).render());
   }
+  updateContactGroupsData() {
+    this.contactGroupObjs.forEach(obj => {
+      const group = this.groups.find(g => g.id === obj.id)
+      if (group) {
+        group.title = obj.title;
+      }
+    });
+  }
   updateGroup(updatedGroup) {
     const index = this.groups.findIndex(item => item.id === updatedGroup.id);
 
@@ -68,6 +76,8 @@ export default class ContactGroups extends DefaultComponent {
   }
 
   _init() {
+    this.contactGroupObjs = [];
+
     this.el = this._create();
     this.list = this.el.querySelector(".contact-groups__list")
   }
@@ -82,7 +92,9 @@ export default class ContactGroups extends DefaultComponent {
     const list = createDOM("div", { className: "contact-groups__list" })
 
     this.groups.forEach(group => {
-      list.append(new ContactGroup({ ...group, onButtonRemoveClick: this.handleRemoveButtonClick.bind(this) }).render());
+      const contactGroup =  new ContactGroup({ ...group, onButtonRemoveClick: this.handleRemoveButtonClick.bind(this) })
+      this.contactGroupObjs.push(contactGroup)
+      list.append(contactGroup.render());
     });
 
     return list;

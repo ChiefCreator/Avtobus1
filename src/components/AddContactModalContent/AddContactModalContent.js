@@ -94,6 +94,17 @@ export default class AddContactModalContent extends DefaultComponent {
     this.selectFieldObj.removeError();
   }
 
+  renderSelect(contactGroups) {
+    this.contactGroups = contactGroups;
+
+    this.selectFieldObj.el.remove();
+    this.selectFieldObj = new SelectField({
+      options: this.contactGroups,
+    });
+
+    this.list.append(this.selectFieldObj.render())
+  }
+
   _init() {
     this.inputFieldNameObj = new InputField({ placeholder: "Введите ФИО", value: this.nameValue, name: "name" });
     this.inputFieldNumberObj = new InputField({ placeholder: "Введите номер", value: this.numberValue, name: "number" });
@@ -103,6 +114,7 @@ export default class AddContactModalContent extends DefaultComponent {
 
     this.el = this._create();
     this.form = this.el.querySelector(".add-contact-modal-content__form");
+    this.list = this.el.querySelector(".add-contact-modal-content__list");
 
     this._initListeners();
   }

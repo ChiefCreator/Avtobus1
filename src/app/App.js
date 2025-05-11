@@ -147,7 +147,6 @@ export default class App {
         this.contactGroupsModal.close();
       }
     });
-
     const buttonAddGroup = new Button({
       className: "button_without-bg",
       title: "Добавить",
@@ -161,7 +160,11 @@ export default class App {
       className: "button_primary",
       title: "Сохранить",
       onClick: () => {
+        contactGroups.updateContactGroupsData();
+
+        this.addContactModalContent.renderSelect(this.contactGroups);
         contactsPanel.renderContent();
+
         this.contactGroupsModal.close();
       }
     });
@@ -199,7 +202,7 @@ export default class App {
       }
     });
 
-    const addContactModalContent = new AddContactModalContent({
+    this.addContactModalContent = new AddContactModalContent({
       nameValue: "",
       numberValue: "",
       contactGroups: this.contactGroups.map(({ id, title }) => ({ id, title })),
@@ -228,10 +231,10 @@ export default class App {
     });
     this.addContactModal = new Modal({ 
       title: "Добавление контакта",
-      content: addContactModalContent,
+      content: this.addContactModalContent,
       buttons: [buttonSaveContact],
       onClose: () => {
-        addContactModalContent.onModalClose();
+        this.addContactModalContent.onModalClose();
       },
     });
 
