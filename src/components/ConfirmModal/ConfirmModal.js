@@ -21,8 +21,8 @@ export default class ConfirmModal extends DefaultComponent {
   setIsOpen(isOpen) {
     this.isOpen = isOpen;
   }
-  setDeletedGroupId(id) {
-    this.deletedGroupId = id;
+  setArg(arg) {
+    this.arg = arg
   }
 
   toggle() {

@@ -1,0 +1,21 @@
+.button-remove {
+  display: inline-flex;
+  border: 1px solid var(--color-neutral-main--dark);
+  border-radius: 6px;
+  cursor: pointer;
+  width: 38px;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+}
+.button-remove__icon path {
+  fill: var(--color-neutral-main--dark);
+}
+
+.button-remove:hover {
+  background-color: var(--color-third);
+  border: 1px solid var(--color-third);
+}
+.button-remove:hover .button-remove__icon path {
+  fill: white;
+}

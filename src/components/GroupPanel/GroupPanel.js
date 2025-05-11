@@ -6,13 +6,14 @@ import ContactCard from "../ContactCard/ContactCard";
 import "./GroupPanel.css";
 
 export default class GroupPanel extends DefaultComponent {
-  constructor({ id, title, contacts, index, isOpen }) {
+  constructor({ id, title, contacts, index, isOpen, onButtonRemoveClick }) {
     super();
 
     this.id = id;
     this.title = title;
     this.contacts = contacts;
     this.index = index;
+    this.onButtonRemoveClick = onButtonRemoveClick;
 
     this.contactCards = [];
 
@@ -26,6 +27,9 @@ export default class GroupPanel extends DefaultComponent {
   }
   toggle() {
     this.el.classList.toggle("group-panel_open");
+  }
+  removeContactCard(contactId) {
+    this.contactCards.find(item => item.id === contactId).remove();
   }
 
   _init() {
@@ -50,7 +54,7 @@ export default class GroupPanel extends DefaultComponent {
     const body = groupPanel.querySelector(".group-panel__body");
 
     this.contacts?.forEach(data => {
-      const contactCard = new ContactCard({ ...data });
+      const contactCard = new ContactCard({ ...data, groupId: this.id, onButtonRemoveClick: this.onButtonRemoveClick });
       this.contactCards.push(contactCard);
 
       body.append(contactCard.render());

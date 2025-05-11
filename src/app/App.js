@@ -62,15 +62,39 @@ export default class App {
     this.controller = new AppController(this.model);
   }
 
+  removeContact(groupId, contactId) {
+    const group = this.contactGroups.find(g => g.id === groupId);
+  
+    if (group && group.contacts) {
+      group.contacts = group.contacts.filter(contact => contact.id !== contactId);
+    }
+  }
+
   init() {
-    const contactsPanel = new ContactsPanel({ contactGroups: this.contactGroups });
+    const contactsPanel = new ContactsPanel({
+      contactGroups: this.contactGroups,
+      onGroupPanelRemoveButtonClick: (arg) => {
+        this.confirmModal_2.open();
+        this.confirmModal_2.setArg(arg);
+      }
+    });
+    this.confirmModal_2 = new ConfirmModal({
+      title: "Удалить контакт?",
+      description: "Данный контакт невозможно будет восстановить",
+      buttonTrueOnClick: () => {
+        const { groupId, contactId } = this.confirmModal_2.arg;
+        contactsPanel.removeContactCard(this.confirmModal_2.arg);     
+        
+        this.removeContact(groupId, contactId);
+      }
+    });
     const homePage = new HomePage({ contactsPanelObj: contactsPanel });
 
     const contactGroups = new ContactGroups({
       groups: this.contactGroups,
-      onClickButtonDelete: (id) => {
+      onClickButtonDelete: (arg) => {
         this.confirmModal.open();
-        this.confirmModal.setDeletedGroupId(id);
+        this.confirmModal.setArg(arg);
         this.contactGroupsModal.close();
       }
     });
@@ -121,7 +145,7 @@ export default class App {
       title: "Удалить группу?",
       description: "Удаление группы повлечет за собой удаление контактов связанных с этой группой",
       buttonTrueOnClick: () => {
-        contactGroups.removeGroup(this.confirmModal.deletedGroupId);
+        contactGroups.removeGroup(this.confirmModal.arg);
         contactsPanel.renderContent();
       }
     });
@@ -175,6 +199,7 @@ export default class App {
       contactGroupsModal: this.contactGroupsModal,
       addContactModal: this.addContactModal,
       confirmModal: this.confirmModal,
+      confirmModal_2: this.confirmModal_2
     };
 
     this.view.setRoutes(this.routes);

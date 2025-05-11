@@ -18,3 +18,10 @@
   font-size: 18px;
   line-height: 120%;
 }
+
+.contact-card__controls {
+  margin-left: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
