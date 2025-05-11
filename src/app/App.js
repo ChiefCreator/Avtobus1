@@ -163,6 +163,7 @@ export default class App {
         contactGroups.updateContactGroupsData();
 
         this.addContactModalContent.renderSelect(this.contactGroups);
+        this.editContactModalContent.renderSelect(this.contactGroups);
         contactsPanel.renderContent();
 
         this.contactGroupsModal.close();

@@ -72,7 +72,7 @@ export default class ContactGroups extends DefaultComponent {
       }
     })
 
-    // this.updateList();
+    this.updateList();
   }
 
   _init() {
