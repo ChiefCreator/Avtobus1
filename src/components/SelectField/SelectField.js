@@ -10,13 +10,17 @@ export default class SelectField extends DefaultComponent {
     this.selectedValue = null;
     this.defaultValue = "Выберите группу"
     this.options = options;
-    console.log(options)
 
     this.isOpen = false;
 
     this._init();
   }
 
+  setValue(value) {
+    this.selectedValue = value;
+    this.selectInput.value = value;
+    this.selectedValueEl.textContent = value;
+  }
   setOptions(newOptions) {
     this.options = newOptions;
   }

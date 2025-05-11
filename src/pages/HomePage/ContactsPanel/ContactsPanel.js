@@ -5,11 +5,12 @@ import { createDOM } from "../../../lib/domUtils";
 import "./ContactsPanel.css";
 
 export default class ContactsPanel extends DefaultComponent {
-  constructor({ contactGroups, onGroupPanelRemoveButtonClick }) {
+  constructor({ contactGroups, onButtonRemoveClick, onEditButtonClick }) {
     super();
 
     this.contactGroups = contactGroups;
-    this.onGroupPanelRemoveButtonClick = onGroupPanelRemoveButtonClick;
+    this.onEditButtonClick = onEditButtonClick;
+    this.onButtonRemoveClick = onButtonRemoveClick;
 
     this.el = null;
     this.panelContent = null;
@@ -66,8 +67,9 @@ export default class ContactsPanel extends DefaultComponent {
   }
   _createContactGroupsList() {
     const list = createDOM("div", { className: "contact-groups-list" });
-
-    this.contactGroups.forEach((group, i) => {
+    
+    let index = 0;
+    this.contactGroups.forEach(group => {
       const { id, title, contacts } = group;
 
       if (!contacts?.length) return;
@@ -76,14 +78,17 @@ export default class ContactsPanel extends DefaultComponent {
         id,
         title,
         contacts,
-        index: i,
+        index: index,
         isOpen: false,
-        onButtonRemoveClick: (arg) => this.onGroupPanelRemoveButtonClick(arg)
+        onButtonRemoveClick: this.onButtonRemoveClick,
+        onEditButtonClick: this.onEditButtonClick,
       });
 
       this.groupPanels.push(groupPanelObj);
       
       list.append(groupPanelObj.render());
+
+      index++;
     });
 
     return list;

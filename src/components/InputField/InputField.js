@@ -14,6 +14,10 @@ export default class InputField extends DefaultComponent {
     this._init();
   }
 
+  setValue(value) {
+    this.value = value;
+    this.input.value = value;
+  }
   clearValue() {
     this.value = "";
     this.input.value = "";

@@ -69,14 +69,58 @@ export default class App {
       group.contacts = group.contacts.filter(contact => contact.id !== contactId);
     }
   }
+  updateOrRelocateContact(contactId, newContactData, newGroupTitle) {
+    let foundContact = null;
+    let currentGroup = null;
+  
+    for (const group of this.contactGroups) {
+      if (Array.isArray(group.contacts)) {
+        const index = group.contacts.findIndex(c => c.id === contactId);
+        if (index !== -1) {
+          foundContact = { ...group.contacts[index], ...newContactData };
+          currentGroup = group;
+          group.contacts.splice(index, 1);
+          break;
+        }
+      }
+    }
+  
+    if (!foundContact) return;
+  
+    let targetGroup = this.contactGroups.find(g => g.title === newGroupTitle);
+
+    if (!targetGroup) {
+      targetGroup = {
+        id: newGroupTitle.toLowerCase().replace(/\s+/g, '-'),
+        title: newGroupTitle,
+        contacts: []
+      };
+      this.contactGroups.push(targetGroup);
+    }
+  
+    if (!Array.isArray(targetGroup.contacts)) {
+      targetGroup.contacts = [];
+    }
+
+    targetGroup.contacts.push(foundContact);
+  }
+  
 
   init() {
     const contactsPanel = new ContactsPanel({
       contactGroups: this.contactGroups,
-      onGroupPanelRemoveButtonClick: (arg) => {
+      onButtonRemoveClick: (arg) => {
         this.confirmModal_2.open();
         this.confirmModal_2.setArg(arg);
-      }
+      },
+      onEditButtonClick: ({ groupId, contactId }) => {
+        const group = this.contactGroups.find(item => item.id === groupId);
+        const { id, name, number } = group?.contacts.find(item => item.id === contactId);
+        const contactData = { id, name, number, contactGroup: group.title };
+
+        this.editContactModal.toggle();
+        this.editContactModalContent.setData(contactData);
+      },
     });
     this.confirmModal_2 = new ConfirmModal({
       title: "Удалить контакт?",
@@ -159,6 +203,7 @@ export default class App {
       nameValue: "",
       numberValue: "",
       contactGroups: this.contactGroups.map(({ id, title }) => ({ id, title })),
+      formId: "form-add-contact",
       onFormSubmit: () => {
         this.addContactModal.close();
       },
@@ -190,6 +235,35 @@ export default class App {
       },
     });
 
+    this.editContactModalContent = new AddContactModalContent({
+      nameValue: "",
+      numberValue: "",
+      contactGroups: this.contactGroups.map(({ id, title }) => ({ id, title })),
+      formId: "form-edit-contact",
+      onFormSubmit: ({ id, name, number, contactGroup }) => {
+
+        this.updateOrRelocateContact(id, { id, name, number }, contactGroup);
+
+        contactsPanel.setContactGroups(this.contactGroups);
+        contactsPanel.renderContent();
+
+        this.addContactModal.close();
+      },
+    });
+    const buttonEditContact = new Button({
+      className: "button_primary",
+      title: "Изменить контакт",
+      attributes: { form: "form-edit-contact", type: "submit" },
+    });
+    this.editContactModal = new Modal({ 
+      title: "Изменение контакта",
+      content: this.editContactModalContent,
+      buttons: [buttonEditContact],
+      onClose: () => {
+        this.editContactModalContent.onModalClose();
+      },
+    });
+
     this.routes = {
       main: homePage,
       default: homePage,
@@ -204,6 +278,7 @@ export default class App {
       }),
       contactGroupsModal: this.contactGroupsModal,
       addContactModal: this.addContactModal,
+      editContactModal: this.editContactModal,
       confirmModal: this.confirmModal,
       confirmModal_2: this.confirmModal_2
     };

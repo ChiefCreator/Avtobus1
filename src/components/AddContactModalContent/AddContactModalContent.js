@@ -1,4 +1,4 @@
-import { createDOM } from "../../lib/domUtils";
+import { createDOM, generateId } from "../../lib/domUtils";
 
 import DefaultComponent from "../DefaultComponent/DefaultComponent";
 import InputField from "../InputField/InputField";
@@ -7,16 +7,24 @@ import SelectField from "../SelectField/SelectField";
 import "./AddContactModalContent.css";
 
 export default class AddContactModalContent extends DefaultComponent {
-  constructor({ nameValue = "", numberValue = "", contactGroups, onFormSubmit, onAddNewContact }) {
+  constructor({ nameValue = "", numberValue = "", formId, contactGroups, onFormSubmit, onAddNewContact }) {
     super();
 
     this.nameValue = nameValue;
     this.numberValue = numberValue;
     this.contactGroups = contactGroups;
+    this.formId = formId;
     this.onFormSubmit = onFormSubmit;
     this.onAddNewContact = onAddNewContact;
 
     this._init();
+  }
+
+  setData({ id, name, number, contactGroup }) {
+    this.inputFieldNameObj.setValue(name);
+    this.inputFieldNumberObj.setValue(number);
+    this.selectFieldObj.setValue(contactGroup);
+    this.contactId = id;
   }
 
   _addNewContact(data) {
@@ -31,7 +39,7 @@ export default class AddContactModalContent extends DefaultComponent {
     
     const formData = new FormData(this.form);
 
-    const data = {};
+    const data = { id: this.contactId ?? generateId() };
     for (let [key, value] of formData.entries()) {
       data[key] = value.trim();
     }
@@ -40,7 +48,7 @@ export default class AddContactModalContent extends DefaultComponent {
 
     if (!isError) {
       this._addNewContact(data);
-      this.onFormSubmit?.();
+      this.onFormSubmit?.(data);
     }
   }
   _validateData(data) {
@@ -77,6 +85,7 @@ export default class AddContactModalContent extends DefaultComponent {
   onModalClose() {
     this.nameValue = "";
     this.numberValue = "";
+    this.contactId = null;
     this.inputFieldNameObj.clearValue();
     this.inputFieldNumberObj.clearValue();
 
@@ -102,7 +111,7 @@ export default class AddContactModalContent extends DefaultComponent {
   }
   _create() {
     const content = createDOM("div", { className: "add-contact-modal-content" });
-    const form = createDOM("form", { className: "add-contact-modal-content__form", id: "form-add-contact" })
+    const form = createDOM("form", { className: "add-contact-modal-content__form", id: this.formId })
     const contentList = createDOM("div", { className: "add-contact-modal-content__list" });
 
     form.append(contentList);

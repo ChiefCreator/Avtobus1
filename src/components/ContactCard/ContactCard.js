@@ -7,7 +7,7 @@ import ButtonRemove from "../ButtonRemove/ButtonRemove";
 import "./ContactCard.css";
 
 export default class ContactCard extends DefaultComponent {
-  constructor({ id, name, number, groupId, onButtonRemoveClick }) {
+  constructor({ id, name, number, groupId, onButtonRemoveClick, onEditButtonClick }) {
     super();
 
     this.id = id;
@@ -15,6 +15,7 @@ export default class ContactCard extends DefaultComponent {
     this.number = number;
     this.groupId = groupId;
     this.onButtonRemoveClick = onButtonRemoveClick;
+    this.onEditButtonClick = onEditButtonClick;
 
     this._init();
   }
@@ -24,8 +25,14 @@ export default class ContactCard extends DefaultComponent {
   }
 
   _init() {
-    this.editButtonObj = new ButtonEdit({ className: "" });
-    this.removeButtonObj = new ButtonRemove({ className: "", onClick: () => this.onButtonRemoveClick({ groupId: this.groupId, contactId: this.id }) });
+    this.editButtonObj = new ButtonEdit({
+      className: "",
+      onClick: () => this.onEditButtonClick({ groupId: this.groupId, contactId: this.id })
+    });
+    this.removeButtonObj = new ButtonRemove({
+      className: "",
+      onClick: () => this.onButtonRemoveClick({ groupId: this.groupId, contactId: this.id })
+    });
 
 
     this.el = this._create();

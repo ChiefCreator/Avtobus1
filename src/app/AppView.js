@@ -42,6 +42,7 @@ export default class AppView {
     const header = this.components.header.render();
     modalsContainer.append(this.components.contactGroupsModal.render());
     modalsContainer.append(this.components.addContactModal.render());
+    modalsContainer.append(this.components.editContactModal.render());
     modalsContainer.append(this.components.confirmModal_2.render());
     modalsContainer.append(this.components.confirmModal.render());
 
