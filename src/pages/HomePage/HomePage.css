@@ -21,5 +21,7 @@
   }
   .page__button-add-wrapper .button {
     width: 100%;
+    padding: 16px 0;
+    justify-content: center;
   }
 }

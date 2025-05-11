@@ -19,27 +19,18 @@ const buttonAddIcon = `
 `
 
 export default class HomePage {
-  constructor({ contactsPanelObj }) {
+  constructor({ contactsPanelObj, buttonAddContactMobile }) {
     this.id = "main";
     this.title = "Главная";
     this.page = null;
 
     this.contactsPanelObj = contactsPanelObj;
-    this.buttonObj = null;
+    this.buttonAddContact = buttonAddContactMobile;
 
     this._init();
   }
 
   _init() {
-    this.buttonObj = new Button({
-      className: "button_add",
-      title: "Добавить контакт",
-      icon: buttonAddIcon,
-      onClick: () => {
-       
-      }
-    });
-
     this.page = this._create();
   }
   _create() {
@@ -56,7 +47,8 @@ export default class HomePage {
     const buttonAddWrapper = pageContainer.querySelector(".page__button-add-wrapper");
     const contactsPanelWrapper = pageContainer.querySelector(".page__contacts-panel-wrapper");
 
-    const buttonAdd = this.buttonObj.render();
+    const buttonAdd = this.buttonAddContact.render();
+    console.log(buttonAdd)
     const container = new Container({ children: pageContainer }).render();
 
     buttonAddWrapper.append(buttonAdd);

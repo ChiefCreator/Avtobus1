@@ -41,3 +41,6 @@
 .group-panel_open .group-panel__arrow {
   transform: rotate(180deg);
 }
+.group-panel_open .group-panel__title {
+  color: var(--color-primary);
+}

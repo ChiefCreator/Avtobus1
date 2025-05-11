@@ -115,7 +115,6 @@ export default class App {
         }
       }
     });
-    const homePage = new HomePage({ contactsPanelObj: contactsPanel });
 
     const contactGroups = new ContactGroups({
       groups: this.contactGroups,
@@ -256,6 +255,17 @@ export default class App {
         this.editContactModalContent.onModalClose();
       },
     });
+
+    const buttonAddContactMobile = new Button({
+      className: "button_add",
+      title: "Добавить контакт",
+      icon: buttonAddIcon,
+      onClick: () => {
+        this.addContactModal.toggle();
+      }
+    });
+
+    const homePage = new HomePage({ contactsPanelObj: contactsPanel, buttonAddContactMobile: buttonAddContactMobile });
 
     this.routes = {
       main: homePage,
