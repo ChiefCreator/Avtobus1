@@ -2,6 +2,9 @@
   margin-top: 56px;
   height: 100%;
 }
+.contacts-panel__content {
+  height: 100%;
+}
 
 .empty {
   height: 100%;

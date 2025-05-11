@@ -86,6 +86,11 @@ export default class App {
         contactsPanel.removeContactCard(this.confirmModal_2.arg);     
         
         this.removeContact(groupId, contactId);
+        contactsPanel.setContactGroups(this.contactGroups);
+
+        if (!this.contactGroups.find(item => item.id === groupId).contacts?.length) {
+          contactsPanel.renderContent();
+        }
       }
     });
     const homePage = new HomePage({ contactsPanelObj: contactsPanel });
@@ -167,6 +172,7 @@ export default class App {
           }
 
           contactsPanel.setContactGroups(this.contactGroups);
+          contactsPanel.renderContent();
         }
       }
     });

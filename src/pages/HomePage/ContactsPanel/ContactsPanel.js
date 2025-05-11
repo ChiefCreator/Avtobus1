@@ -24,11 +24,14 @@ export default class ContactsPanel extends DefaultComponent {
 
   setContactGroups(contactGroups) {
     this.contactGroups = contactGroups;
-
-    this.renderContent();
   }
   removeContactCard({ groupId, contactId }) {
     this.groupPanels.find(item => item.id === groupId).removeContactCard(contactId);
+  }
+  _hasAnyContacts() {
+    return this.contactGroups.some(
+      group => Array.isArray(group.contacts) && group.contacts.length > 0
+    );
   }
 
   handleClick(e) {
@@ -64,8 +67,20 @@ export default class ContactsPanel extends DefaultComponent {
   _createContactGroupsList() {
     const list = createDOM("div", { className: "contact-groups-list" });
 
-    this.contactGroups.forEach((data, i) => {
-      const groupPanelObj = new GroupPanel({ id: data.id, title: data.title, contacts: data.contacts, index: i, isOpen: false, onButtonRemoveClick: (arg) => this.onGroupPanelRemoveButtonClick(arg) });
+    this.contactGroups.forEach((group, i) => {
+      const { id, title, contacts } = group;
+
+      if (!contacts?.length) return;
+
+      const groupPanelObj = new GroupPanel({
+        id,
+        title,
+        contacts,
+        index: i,
+        isOpen: false,
+        onButtonRemoveClick: (arg) => this.onGroupPanelRemoveButtonClick(arg)
+      });
+
       this.groupPanels.push(groupPanelObj);
       
       list.append(groupPanelObj.render());
@@ -74,13 +89,13 @@ export default class ContactsPanel extends DefaultComponent {
     return list;
   }
   _createEmpty() {
-    return createDOM("div", { className: "empty", innerHTML: `<span class="empty__title"></span>` });
+    return createDOM("div", { className: "empty", innerHTML: `<span class="empty__title">Список контактов пуст</span>` });
   }
   renderContent() {
     this.panelContent.innerHTML = "";
     this.groupPanels = [];
 
-    if (this.contactGroups?.length) {
+    if (this._hasAnyContacts()) {
       this.contactGroupsList = this._createContactGroupsList()
       this.panelContent.append(this.contactGroupsList);
     } else {
