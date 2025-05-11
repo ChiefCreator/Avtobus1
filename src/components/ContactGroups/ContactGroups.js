@@ -12,6 +12,7 @@ export default class ContactGroups extends DefaultComponent {
     super();
 
     this.groups = groups;
+    this.newGroups = [];
     this.onClickButtonDelete = onClickButtonDelete;
     this.onGroupRemove = onGroupRemove;
 
@@ -30,7 +31,7 @@ export default class ContactGroups extends DefaultComponent {
     }
     this.groups.push(newGroup);
 
-    const contactGroup =  new ContactGroup({ ...newGroup, onButtonRemoveClick: this.handleRemoveButtonClick.bind(this), update: (group) => this.updateGroup(group) })
+    const contactGroup =  new ContactGroup({ ...newGroup, onButtonRemoveClick: this.handleRemoveButtonClick.bind(this) })
     this.contactGroupObjs.push(contactGroup)
     this.list.append(contactGroup.render());
   }
@@ -76,6 +77,12 @@ export default class ContactGroups extends DefaultComponent {
     arr.forEach(({ id, title, isRecentlyAdded }) => {
       if (!title && isRecentlyAdded) {
         this.removeGroup(id);
+      }
+    })
+
+    this.groups.forEach(({ isRecentlyAdded }, i) => {
+      if (isRecentlyAdded) {
+        this.groups[i].isRecentlyAdded = false;
       }
     })
 

@@ -5,28 +5,19 @@ import DefaultComponent from "../../DefaultComponent/DefaultComponent";
 import "./ContactGroup.css";
 
 export default class ContactGroup extends DefaultComponent {
-  constructor({ id, title, isRecentlyAdded, onButtonRemoveClick, update }) {
+  constructor({ id, title, isRecentlyAdded, onButtonRemoveClick }) {
     super();
 
     this.id = id;
     this.title = title;
     this.isRecentlyAdded = isRecentlyAdded;
     this.onButtonRemoveClick = onButtonRemoveClick;
-    this.update = update;
 
     this._init();
   }
 
   changeTitle(e) {
     this.title = e.target.value;
-    
-    if (this.title) {
-      this.isRecentlyAdded = false;
-    }
-
-    if (this.update) {
-      this.update({ id: this.id, title: this.title, isRecentlyAdded: this.isRecentlyAdded });
-    }
   }
 
   _init() {
