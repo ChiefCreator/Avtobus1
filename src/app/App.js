@@ -33,29 +33,7 @@ export default class App {
     this.routes = null;
     this.components = null;
 
-    this.contactGroups = [
-      {
-      id: "friends",
-      title: "Друзья",
-      contacts: [
-        {
-          id: "tima",
-          name: "Тима",
-          number: "+375256038315",
-        },
-        {
-          id: "ganchick",
-          name: "Ганчик",
-          number: "+375256024315",
-        },
-      ],
-      },
-      {
-        id: "collegues",
-        title: "Коллеги"
-      }
-    ];
-    this.deletedContactGroupId = "friends";
+    this.contactGroups = JSON.parse(localStorage.getItem("contactGroups")) || [],
 
     this.view = new AppView({ root });
     this.model = new AppModel(this.view);
@@ -145,6 +123,11 @@ export default class App {
         this.confirmModal.open();
         this.confirmModal.setArg(arg);
         this.contactGroupsModal.close();
+      },
+      onGroupRemove: () => {
+        this.addContactModalContent.renderSelect(this.contactGroups);
+        this.editContactModalContent.renderSelect(this.contactGroups);
+        contactsPanel.renderContent();
       }
     });
     const buttonAddGroup = new Button({
@@ -167,6 +150,8 @@ export default class App {
         contactsPanel.renderContent();
 
         this.contactGroupsModal.close();
+
+        localStorage.setItem("contactGroups", JSON.stringify(this.contactGroups));
       }
     });
     this.contactGroupsModal = new Modal({ 
@@ -200,6 +185,8 @@ export default class App {
       buttonTrueOnClick: () => {
         contactGroups.removeGroup(this.confirmModal.arg);
         contactsPanel.renderContent();
+
+        localStorage.setItem("contactGroups", JSON.stringify(this.contactGroups));
       }
     });
 
@@ -220,6 +207,7 @@ export default class App {
             contactGroup.contacts.push(contactData);
           }
 
+          localStorage.setItem("contactGroups", JSON.stringify(this.contactGroups));
           contactsPanel.setContactGroups(this.contactGroups);
           contactsPanel.renderContent();
         }
@@ -247,6 +235,7 @@ export default class App {
       onFormSubmit: ({ id, name, number, contactGroup }) => {
 
         this.updateOrRelocateContact(id, { id, name, number }, contactGroup);
+        localStorage.setItem("contactGroups", JSON.stringify(this.contactGroups));
 
         contactsPanel.setContactGroups(this.contactGroups);
         contactsPanel.renderContent();

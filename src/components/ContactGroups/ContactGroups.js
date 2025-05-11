@@ -8,11 +8,12 @@ import { generateId } from "../../lib/domUtils";
 import "./ContactGroups.css";
 
 export default class ContactGroups extends DefaultComponent {
-  constructor({ groups, onClickButtonDelete }) {
+  constructor({ groups, onClickButtonDelete, onGroupRemove }) {
     super();
 
     this.groups = groups;
     this.onClickButtonDelete = onClickButtonDelete;
+    this.onGroupRemove = onGroupRemove;
 
     this._init();
   }
@@ -29,7 +30,9 @@ export default class ContactGroups extends DefaultComponent {
     }
     this.groups.push(newGroup);
 
-    this.list.append(new ContactGroup({ ...newGroup, onButtonRemoveClick: this.handleRemoveButtonClick.bind(this), update: (group) => this.updateGroup(group) }).render());
+    const contactGroup =  new ContactGroup({ ...newGroup, onButtonRemoveClick: this.handleRemoveButtonClick.bind(this), update: (group) => this.updateGroup(group) })
+    this.contactGroupObjs.push(contactGroup)
+    this.list.append(contactGroup.render());
   }
   updateContactGroupsData() {
     this.contactGroupObjs.forEach(obj => {
@@ -55,6 +58,8 @@ export default class ContactGroups extends DefaultComponent {
       const contactGroup = this.list.querySelector(`[data-id="${id}"]`);
       contactGroup.remove?.();
     }
+
+    this.onGroupRemove?.();
   }
   hasRecentlyAdded() {
     return this.groups.find(group => group.isRecentlyAdded);
@@ -63,10 +68,12 @@ export default class ContactGroups extends DefaultComponent {
     this.el.innerHTML = "";
 
     this.el.append(this._createList());
+    this.list = this.el.querySelector(".contact-groups__list")
   }
 
   onModalClose() {
-    this.groups.forEach(({ id, title, isRecentlyAdded }) => {
+    const arr = [...this.groups];
+    arr.forEach(({ id, title, isRecentlyAdded }) => {
       if (!title && isRecentlyAdded) {
         this.removeGroup(id);
       }
