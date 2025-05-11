@@ -1,0 +1,20 @@
+.contact-card {
+  border-top: 1px solid var(--color-neutral-main--dark);
+}
+.contact-card__container {
+  display: flex;
+  align-items: center;
+  padding: 24px 0;
+}
+.contact-card__title {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 120%;
+  opacity: 0.5;
+}
+.contact-card__number {
+  margin-left: auto;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 120%;
+}

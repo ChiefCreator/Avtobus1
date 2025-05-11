@@ -10,6 +10,7 @@ import Modal from "../components/Modal/Modal.js";
 import ContactsPanel from "../pages/HomePage/ContactsPanel/ContactsPanel.js";
 import ContactGroups from "../components/ContactGroups/ContactGroups.js";
 import ConfirmModal from "../components/ConfirmModal/ConfirmModal.js";
+import AddContactModalContent from "../components/AddContactModalContent/AddContactModalContent.js";
 
 const buttonAddIcon = `
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -32,7 +33,28 @@ export default class App {
     this.routes = null;
     this.components = null;
 
-    this.contactGroups = [{ id: "friends", title: "Друзья" }, { id: "collegues", title: "Коллеги" }];
+    this.contactGroups = [
+      {
+      id: "friends",
+      title: "Друзья",
+      contacts: [
+        {
+          id: "tima",
+          name: "Тима",
+          number: "+375256038315",
+        },
+        {
+          id: "ganchick",
+          name: "Ганчик",
+          number: "+375256024315",
+        },
+      ],
+      },
+      {
+        id: "collegues",
+        title: "Коллеги"
+      }
+    ];
     this.deletedContactGroupId = "friends";
 
     this.view = new AppView({ root });
@@ -52,6 +74,7 @@ export default class App {
         this.contactGroupsModal.close();
       }
     });
+
     const buttonAddGroup = new Button({
       className: "button_without-bg",
       title: "Добавить",
@@ -69,7 +92,6 @@ export default class App {
         this.contactGroupsModal.close();
       }
     });
-
     this.contactGroupsModal = new Modal({ 
       title: "Группы контактов",
       content: contactGroups,
@@ -79,6 +101,14 @@ export default class App {
       }
     });
 
+    const buttonAddContact = new Button({
+      className: "header__button-add button_add",
+      title: "Добавить контакт",
+      icon: buttonAddIcon,
+      onClick: () => {
+        this.addContactModal.toggle();
+      }
+    });
     const buttonGrops = new Button({ 
       className: "button_primary",
       title: "Группы",
@@ -96,6 +126,40 @@ export default class App {
       }
     });
 
+    const addContactModalContent = new AddContactModalContent({
+      nameValue: "",
+      numberValue: "",
+      contactGroups: this.contactGroups.map(({ id, title }) => ({ id, title })),
+      onFormSubmit: () => {
+        this.addContactModal.close();
+      },
+      onAddNewContact: (contactData) => {
+        const contactGroup = this.contactGroups.find(item => item.title === contactData.contactGroup);
+        if (contactGroup) {
+          if (!contactGroup.contacts) {
+            contactGroup.contacts = [contactData];
+          } else {
+            contactGroup.contacts.push(contactData);
+          }
+
+          contactsPanel.setContactGroups(this.contactGroups);
+        }
+      }
+    });
+    const buttonSaveContact = new Button({
+      className: "button_primary",
+      title: "Сохранить",
+      attributes: { form: "form-add-contact", type: "submit" },
+    });
+    this.addContactModal = new Modal({ 
+      title: "Добавление контакта",
+      content: addContactModalContent,
+      buttons: [buttonSaveContact],
+      onClose: () => {
+        addContactModalContent.onModalClose();
+      },
+    });
+
     this.routes = {
       main: homePage,
       default: homePage,
@@ -104,15 +168,12 @@ export default class App {
     this.components = {
       header: new Header({
         buttons: [
-          new Button({
-            className: "header__button-add button_add",
-            title: "Добавить контакт",
-            icon: buttonAddIcon
-          }),
+          buttonAddContact,
           buttonGrops
         ]
       }),
       contactGroupsModal: this.contactGroupsModal,
+      addContactModal: this.addContactModal,
       confirmModal: this.confirmModal,
     };
 

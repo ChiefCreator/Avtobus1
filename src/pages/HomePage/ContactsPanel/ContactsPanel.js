@@ -21,6 +21,12 @@ export default class ContactsPanel extends DefaultComponent {
     this._init();
   }
 
+  setContactGroups(contactGroups) {
+    this.contactGroups = contactGroups;
+
+    this.renderContent();
+  }
+
   handleClick(e) {
     const groupPanelHeader = e.target.closest(".group-panel__header");
     if (groupPanelHeader) {
@@ -55,7 +61,7 @@ export default class ContactsPanel extends DefaultComponent {
     const list = createDOM("div", { className: "contact-groups-list" });
 
     this.contactGroups.forEach((data, i) => {
-      const groupPanelObj = new GroupPanel({ id: data.id, title: data.title, index: i, isOpen: false });
+      const groupPanelObj = new GroupPanel({ id: data.id, title: data.title, contacts: data.contacts, index: i, isOpen: false });
       this.groupPanels.push(groupPanelObj);
       
       list.append(groupPanelObj.render());

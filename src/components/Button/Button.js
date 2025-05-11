@@ -5,13 +5,15 @@ import { createDOM } from "../../lib/domUtils";
 import "./Button.css";
 
 export default class Button extends DefaultComponent {
-  constructor({ className = "", title, icon, onClick }) {
+  constructor({ className = "", title, icon, attributes, onClick, onSubmit }) {
     super();
 
     this.className = className;
     this.title = title;
     this.icon = icon;
+    this.attributes = attributes;
     this.onClick = onClick;
+    this.onSubmit = onSubmit;
 
     this._init();
   }
@@ -29,7 +31,7 @@ export default class Button extends DefaultComponent {
       <span className="button__title">${this.title}</span>
       ${this.icon ?? ""}
     `;
-    const el = createDOM("button", { className: `button ${this.className}`, innerHTML });
+    const el = createDOM("button", { className: `button ${this.className}`, innerHTML, attributes: this.attributes });
 
     return el;
   }

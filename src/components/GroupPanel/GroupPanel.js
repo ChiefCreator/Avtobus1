@@ -1,15 +1,20 @@
 import { createDOM } from "../../lib/domUtils";
 import DefaultComponent from "../DefaultComponent/DefaultComponent";
 
+import ContactCard from "../ContactCard/ContactCard";
+
 import "./GroupPanel.css";
 
 export default class GroupPanel extends DefaultComponent {
-  constructor({ id, title, index, isOpen }) {
+  constructor({ id, title, contacts, index, isOpen }) {
     super();
 
     this.id = id;
     this.title = title;
+    this.contacts = contacts;
     this.index = index;
+
+    this.contactCards = [];
 
     this.isOpen = isOpen;
 
@@ -37,11 +42,19 @@ export default class GroupPanel extends DefaultComponent {
       </header>
       <div class="group-panel__dropdown">
         <div class="group-panel__dropdown-container">
-          <div class="group-panel__body">Контакты</div>
+          <div class="group-panel__body"></div>
         </div>
       </div>
     `;
-    const groupPanel = createDOM("div", { className: "group-panel", innerHTML, attributes: { "data-index": this.index } })
+    const groupPanel = createDOM("div", { className: "group-panel", innerHTML, attributes: { "data-index": this.index } });
+    const body = groupPanel.querySelector(".group-panel__body");
+
+    this.contacts?.forEach(data => {
+      const contactCard = new ContactCard({ ...data });
+      this.contactCards.push(contactCard);
+
+      body.append(contactCard.render());
+    });
 
     return groupPanel;
   }

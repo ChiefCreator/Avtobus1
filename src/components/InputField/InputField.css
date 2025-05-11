@@ -1,0 +1,30 @@
+.input-field {
+  width: 100%;
+}
+
+.input-field__input {
+  width: 100%;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 130%;
+
+  background-color: var(--color-neutral-main--dark);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.input-field__error {
+  margin-top: 4px;
+  color: red;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 130%;
+  display: none;
+}
+
+.input-field_error .input-field__input {
+  border: 1px solid red;
+}
+.input-field_error .input-field__error {
+  display: block;
+}
